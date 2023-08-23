@@ -12,7 +12,7 @@ gradient.addColorStop(1, 'green');
 
 const centerX = canvas.width / 2;
 const centerY = canvas.height / 2;
-const numHalos = 2; // Number of halo rings
+let numHalos = 2; // Number of halo rings
 const maxRadius = 50; // Maximum radius of the largest halo
 const haloSpacing = 20; // Spacing between halos
 
@@ -100,11 +100,6 @@ function drawHalo(x, y, radius, opacity) {
   ctx.globalAlpha = 1; // Reset globalAlpha to default
 }
 
-for (let i = 0; i < numHalos; i++) {
-  const currentRadius = maxRadius + i * haloSpacing;
-  const currentOpacity = 1 - i * 0.1;
-  drawHalo(centerX, centerY, currentRadius, currentOpacity);
-}
 
 function updateHalos(mouseX, mouseY) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -115,12 +110,28 @@ function updateHalos(mouseX, mouseY) {
       drawHalo(mouseX, mouseY, currentRadius, currentOpacity);
     }
   }
+
+function moreHalos(event){
+    ctx.clearRect(0, 0, canvas.width, canvas.height); 
+   // Get the mouse coordinates from the event
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+    
+    // Update numHalos to the desired value
+    numHalos += 1; // Increase the number of halos
+    
+    // Call updateHalos with the updated numHalos value
+    updateHalos(mouseX, mouseY);
+    }
   
-  canvas.addEventListener('mousemove', (event) => {
+canvas.addEventListener('mousemove', (event) => {
     const mouseX = event.clientX;
     const mouseY = event.clientY;
     updateHalos(mouseX, mouseY);
   })
+
+canvas.addEventListener('click', moreHalos);
+
 
 window.addEventListener('resize', function(){
     canvas.width = window.innerWidth;
